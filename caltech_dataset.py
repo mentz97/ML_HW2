@@ -5,7 +5,7 @@ from PIL import Image
 import os
 import os.path
 import sys
-
+import pandas as pd
 
 def pil_loader(path):
     # open path as file to avoid ResourceWarning (https://github.com/python-pillow/Pillow/issues/835)
@@ -29,6 +29,25 @@ class Caltech(VisionDataset):
           through the index
         - Labels should start from 0, so for Caltech you will have lables 0...100 (excluding the background class) 
         '''
+        image_path=[]
+        label=[]
+
+        #self.categories=os.listdir(self.root)
+        #self.categories.remove("BACKGROUND_Google")
+
+        for path in open(f"./{self.split}.txt"):
+            path=path.replace('\n', '')
+            tmp=path;
+            path=path.split('/')
+            if(path[0]!="BACKGOUND_Google"):
+                image_path.append(self.root + '/' + tmp)
+                label.append(path[1])
+            
+        self.data=pd.DataFrame(zip(image_path, label), columns = ["image_path", "label"])
+            
+    
+
+
 
     def __getitem__(self, index):
         '''
@@ -40,10 +59,13 @@ class Caltech(VisionDataset):
             tuple: (sample, target) where target is class_index of the target class.
         '''
 
-        image, label = ... # Provide a way to access image and label via index
+        #image, label = ... # Provide a way to access image and label via index
                            # Image should be a PIL Image
                            # label can be int
 
+        image_path=self.data["image_path"].iloc[index]
+        label=self.data["label"].iloc[index]
+        image=pil_loader(image_path)
         # Applies preprocessing when accessing the image
         if self.transform is not None:
             image = self.transform(image)
@@ -55,5 +77,5 @@ class Caltech(VisionDataset):
         The __len__ method returns the length of the dataset
         It is mandatory, as this is used by several other components
         '''
-        length = ... # Provide a way to get the length (number of elements) of the dataset
+        length = len(self.data) # Provide a way to get the length (number of elements) of the dataset
         return length
