@@ -32,10 +32,10 @@ class Caltech(VisionDataset):
         image_path=[]
         label=[]
 
-        #self.categories=os.listdir(self.root)
-        #self.categories.remove("BACKGROUND_Google")
+        self.categories=os.listdir(self.root)
+        self.categories.remove("BACKGROUND_Google")
 
-        for path in open(f"./{self.split}.txt"):
+        for path in open(f"./Caltech101/{self.split}.txt"):
             path=path.replace('\n', '')
             tmp=path;
             path=path.split('/')
