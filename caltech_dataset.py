@@ -37,11 +37,11 @@ class Caltech(VisionDataset):
 
         for path in open(f"./Caltech101/{self.split}.txt"):
           path = path.replace("\n", "")
-          category = path.split("/")[0]
-          if(category != "BACKGROUND_Google"):
-            image_path = self.root + "/" + path
-            images_paths.append(image_path)
-            labels.append(self.categories.index(category))
+          tmp=path;
+          path=path.split('/')
+          if(path[0] != "BACKGROUND_Google"):
+            images_paths.append(self.root + '/' + tmp)
+            labels.append(path[0])
 
         self.data = pd.DataFrame(zip(images_paths, labels), columns = ["image_path", "label"])
         
