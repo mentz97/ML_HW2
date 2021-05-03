@@ -39,9 +39,9 @@ class Caltech(VisionDataset):
             path=path.replace('\n', '')
             tmp=path;
             path=path.split('/')
-            if(path[0]!="BACKGOUND_Google"):
+            if(path[0]!="BACKGROUND_Google"):
                 image_path.append(self.root + '/' + tmp)
-                label.append(path[4])
+                label.append(path[0])
             
         self.data=pd.DataFrame(zip(image_path, label), columns = ["image_path", "label"])
             
